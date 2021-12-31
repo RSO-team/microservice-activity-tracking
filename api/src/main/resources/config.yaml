@@ -1,0 +1,31 @@
+kumuluzee:
+  name: basketball-activity-tracking
+  env:
+    name: dev
+  version: 1.0.0
+  server:
+    base-url: http://localhost:8082
+    http:
+      port: 8082
+  datasources:
+    - jndi-name: jdbc/activity-trackingDS
+      connection-url: jdbc:postgresql://pg-events.clvqrwayazxs.eu-central-1.rds.amazonaws.com/activity-tracking
+      username: postgres
+      password: postgres12
+  health:
+    checks:
+      data-source-health-check:
+        type: liveness
+        jndi-name: jdbc/activity-trackingDS
+  metrics:
+    web-instrumentation:
+      - name: activity-endpoint
+        url-pattern: /v1/activity/*
+  rest-client:
+    registrations:
+      - class: api
+        url: http://localhost:8082/v1
+        read-timeout: 5000
+rest-config:
+  maintenance-mode: false
+  api-token: htn12kss3

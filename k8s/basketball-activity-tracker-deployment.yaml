@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: basketball-activity-tracking-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: basketball-activity-tracking
+  template:
+    metadata:
+      labels:
+        app: basketball-activity-tracking
+    spec:
+      containers:
+        - image: lgaljo/rt_basketball_activity-tracking:2021-12-06-04-06-53
+          name: basketball-activity-tracking
+          env:
+            - name: KUMULUZEE_DATASOURCES0_CONNECTIONURL
+              value: jdbc:postgresql://pg-events.clvqrwayazxs.eu-central-1.rds.amazonaws.com/activity-tracking
+            - name: KUMULUZEE_DATASOURCES0_USERNAME
+              value: postgres
+            - name: KUMULUZEE_DATASOURCES0_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pg-pass
+                  key: KUMULUZEE_DATASOURCES0_PASSWORD
+          ports:
+            - containerPort: 8081
+              name: server
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: server
+            initialDelaySeconds: 20
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: server
+            initialDelaySeconds: 20
+            periodSeconds: 3
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: basketball-activity-tracking
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8082
+      protocol: TCP
+      targetPort: server
+  selector:
+    app: basketball-activity-tracking
