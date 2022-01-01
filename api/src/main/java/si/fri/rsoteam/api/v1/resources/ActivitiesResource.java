@@ -1,5 +1,9 @@
 package si.fri.rsoteam.api.v1.resources;
 
+import com.kumuluz.ee.logs.LogManager;
+import com.kumuluz.ee.logs.Logger;
+import com.kumuluz.ee.logs.cdi.Log;
+import com.kumuluz.ee.logs.cdi.LogParams;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.headers.Header;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
@@ -23,7 +27,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.util.logging.Logger;
 
 @ApplicationScoped
 @Path("/activities")
@@ -31,7 +34,7 @@ import java.util.logging.Logger;
 @Consumes(MediaType.APPLICATION_JSON)
 public class ActivitiesResource {
 
-    private Logger log = Logger.getLogger(ActivitiesResource.class.getName());
+    private Logger log = LogManager.getLogger(ActivitiesResource.class.getName());
 
     @Inject
     private ActivityBean ActivityBean;
@@ -50,7 +53,9 @@ public class ActivitiesResource {
 
             )
     })
+    @Log(LogParams.METRICS)
     public Response getActivities() {
+        log.warn("Hey, somebody requested all activities");
         return Response.ok(ActivityBean.getAllActivity()).build();
     }
 
@@ -64,6 +69,7 @@ public class ActivitiesResource {
                     content = @Content(schema = @Schema(implementation = ActivityDto.class))
             )
     })
+    @Log(LogParams.METRICS)
     public Response getActivitiesById(@PathParam("objectId") Integer id) {
         return Response.ok(ActivityBean.getActivity(id)).build();
     }
@@ -77,6 +83,7 @@ public class ActivitiesResource {
                     content = @Content(schema = @Schema(implementation = ActivityDto.class))
             )
     })
+    @Log(LogParams.METRICS)
     public Response createActivities(ActivityDto ActivityDto) {
         return Response.status(201).entity(ActivityBean.createActivity(ActivityDto)).build();
     }
@@ -91,6 +98,7 @@ public class ActivitiesResource {
                     content = @Content(schema = @Schema(implementation = ActivityDto.class))
             )
     })
+    @Log(LogParams.METRICS)
     public Response updateActivities(@PathParam("objectId") Integer id, ActivityDto eventDto) {
         return Response.status(201).entity(ActivityBean.updateActivity(eventDto, id)).build();
     }
@@ -105,6 +113,7 @@ public class ActivitiesResource {
                     content = @Content(schema = @Schema(implementation = ActivityDto.class))
             )
     })
+    @Log(LogParams.METRICS)
     public Response deleteEvent(@PathParam("objectId") Integer id) {
         ActivityBean.deleteActivity(id);
         return Response.status(204).build();

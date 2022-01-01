@@ -8,13 +8,14 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import com.kumuluz.ee.logs.LogManager;
+import com.kumuluz.ee.logs.Logger;
 
 
 @RequestScoped
 public class ActivityBean {
-    private Logger log = Logger.getLogger(ActivityBean.class.getName());
+    private Logger log = LogManager.getLogger(ActivityBean.class.getName());
 
     @Inject
     private EntityManager em;
