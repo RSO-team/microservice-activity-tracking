@@ -36,4 +36,4 @@ jobs:
       with:
         file: ./Dockerfile_with_maven_build
         push: true
-        tags: lgaljo/rt_basketball_activity-tracking:${{ steps.time.outputs.time }}
+        tags: lgaljo/rt_basketball_activity_tracking:${{ steps.time.outputs.time }}

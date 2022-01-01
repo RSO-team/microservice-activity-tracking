@@ -13,7 +13,7 @@ spec:
         app: basketball-activity-tracking
     spec:
       containers:
-        - image: lgaljo/rt_basketball_activity-tracking:2021-12-06-04-06-53
+        - image: lgaljo/rt_basketball_activity_tracking:2021-12-06-04-06-53
           name: basketball-activity-tracking
           env:
             - name: KUMULUZEE_DATASOURCES0_CONNECTIONURL
