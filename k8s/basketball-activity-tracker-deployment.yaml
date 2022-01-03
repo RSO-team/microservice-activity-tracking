@@ -19,7 +19,7 @@ spec:
             - name: KUMULUZEE_DATASOURCES0_CONNECTIONURL
               value: jdbc:postgresql://ella.db.elephantsql.com/vkafqezn
             - name: KUMULUZEE_DATASOURCES0_USERNAME
-              value: postgres
+              value: vkafqezn
             - name: KUMULUZEE_DATASOURCES0_PASSWORD
               valueFrom:
                 secretKeyRef:
