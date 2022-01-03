@@ -47,6 +47,9 @@ kumuluzee:
       - class: api
         url: http://localhost:8082/v1
         read-timeout: 5000
+  cors-filter:
+    servlet:
+      allow-origin: "*"
 rest-config:
   maintenance-mode: false
   api-token: htn12kss3
