@@ -51,6 +51,17 @@ kumuluzee:
     servlet:
       allow-origin: "*"
       supported-methods: "GET,POST,HEAD,OPTIONS,PUT,DELETE"
+  discovery:
+    etcd:
+      hosts: http://localhost:2379
+    ttl: 30
+    ping-interval: 5
+  config:
+    start-retry-delay-ms: 500
+    max-retry-delay-ms: 900000
+    etcd:
+      hosts: http://localhost:2379
+
 rest-config:
   maintenance-mode: false
   api-token: htn12kss3
