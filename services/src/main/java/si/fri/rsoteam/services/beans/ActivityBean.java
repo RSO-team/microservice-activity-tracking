@@ -1,4 +1,5 @@
 package si.fri.rsoteam.services.beans;
+
 import org.eclipse.microprofile.metrics.annotation.Timed;
 import si.fri.rsoteam.entities.ActivityEntity;
 import si.fri.rsoteam.lib.dtos.ActivityDto;
@@ -7,8 +8,10 @@ import si.fri.rsoteam.services.mappers.ActivityMapper;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import com.kumuluz.ee.logs.LogManager;
 import com.kumuluz.ee.logs.Logger;
 
@@ -21,13 +24,13 @@ public class ActivityBean {
     private EntityManager em;
 
     @Timed
-    public ActivityDto getActivity(Integer id){
-        return ActivityMapper.entityToDto(em.find(ActivityEntity.class,id));
+    public ActivityDto getActivity(Integer id) {
+        return ActivityMapper.entityToDto(em.find(ActivityEntity.class, id));
     }
 
     @Timed
-    public List<ActivityDto> getAllActivity(){
-        return em.createNamedQuery("Activity.getAll",ActivityEntity.class)
+    public List<ActivityDto> getAllActivity() {
+        return em.createNamedQuery("Activity.getAll", ActivityEntity.class)
                 .getResultList()
                 .stream()
                 .map(ActivityMapper::entityToDto)
@@ -62,6 +65,18 @@ public class ActivityBean {
             this.beginTx();
             em.remove(activityEntity);
             this.commitTx();
+        }
+    }
+
+    public void deleteActivitiesForUser(Integer userId) {
+        beginTx();
+        try {
+            em.createNamedQuery("Activity.deleteForUser", TypedQuery.class)
+                    .setParameter("userId", userId)
+                    .executeUpdate();
+            commitTx();
+        } catch (Exception e) {
+            rollbackTx();
         }
     }
 

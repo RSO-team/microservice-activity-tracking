@@ -37,7 +37,7 @@ public class ActivitiesResource {
     private Logger log = LogManager.getLogger(ActivitiesResource.class.getName());
 
     @Inject
-    private ActivityBean ActivityBean;
+    private ActivityBean activityBean;
 
     @Context
     protected UriInfo uriInfo;
@@ -56,7 +56,7 @@ public class ActivitiesResource {
     @Log(LogParams.METRICS)
     public Response getActivities() {
         log.warn("Hey, somebody requested all activities");
-        return Response.ok(ActivityBean.getAllActivity()).build();
+        return Response.ok(activityBean.getAllActivity()).build();
     }
 
     @GET
@@ -71,7 +71,7 @@ public class ActivitiesResource {
     })
     @Log(LogParams.METRICS)
     public Response getActivitiesById(@PathParam("objectId") Integer id) {
-        return Response.ok(ActivityBean.getActivity(id)).build();
+        return Response.ok(activityBean.getActivity(id)).build();
     }
 
     @POST
@@ -85,7 +85,7 @@ public class ActivitiesResource {
     })
     @Log(LogParams.METRICS)
     public Response createActivities(ActivityDto ActivityDto) {
-        return Response.status(201).entity(ActivityBean.createActivity(ActivityDto)).build();
+        return Response.status(201).entity(activityBean.createActivity(ActivityDto)).build();
     }
 
     @PUT
@@ -100,7 +100,7 @@ public class ActivitiesResource {
     })
     @Log(LogParams.METRICS)
     public Response updateActivities(@PathParam("objectId") Integer id, ActivityDto eventDto) {
-        return Response.status(201).entity(ActivityBean.updateActivity(eventDto, id)).build();
+        return Response.status(201).entity(activityBean.updateActivity(eventDto, id)).build();
     }
 
     @DELETE
@@ -115,7 +115,23 @@ public class ActivitiesResource {
     })
     @Log(LogParams.METRICS)
     public Response deleteEvent(@PathParam("objectId") Integer id) {
-        ActivityBean.deleteActivity(id);
+        activityBean.deleteActivity(id);
+        return Response.status(204).build();
+    }
+
+    @DELETE
+    @Path("user/{userId}")
+    @Operation(summary = "Delete activities for specific user.", description = "Delete activities for specific user.")
+    @APIResponses({
+            @APIResponse(
+                    description = "Successfully deleted activity.",
+                    responseCode = "204",
+                    content = @Content(schema = @Schema(name = "none"))
+            )
+    })
+    @Log(LogParams.METRICS)
+    public Response deleteForUser(@PathParam("userId") Integer userId) {
+        activityBean.deleteActivitiesForUser(userId);
         return Response.status(204).build();
     }
 }

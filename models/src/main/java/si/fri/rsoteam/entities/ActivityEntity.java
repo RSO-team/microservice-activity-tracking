@@ -9,13 +9,13 @@ import java.util.List;
 @Entity
 @Table(name = "activity")
 @NamedQuery(name = "Activity.getAll", query = "SELECT e from ActivityEntity e")
+@NamedQuery(name = "Activity.deleteForUser", query = "DELETE FROM ActivityEntity ae WHERE ae.userId = :userId")
 public class ActivityEntity implements java.io.Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(columnDefinition = "serial")
     private Integer id;
-
 
     @Size(min = 3, max = 20)
     private String name;
